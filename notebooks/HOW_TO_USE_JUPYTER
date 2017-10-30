@@ -27,3 +27,5 @@ If you open a browser and try to copy/paste that link (http://localhost:8888 ...
 ssh -L 8888:localhost:8888 user@gputower.university.edu
 
 This will give you another log in, and now if you copy/paste the above link into your browser you will see the interactive jupyter session.
+
+When you open the jupyter interface, navigate to this directory and open "JupyterBasics" to see some simple examples of how to use jupyter.
