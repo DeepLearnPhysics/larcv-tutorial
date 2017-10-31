@@ -1,0 +1,9 @@
+*.ipynb
+*.root
+*.txt
+*.csv
+*.dat
+*.bin
+*.o
+*.so
+*.pyc
