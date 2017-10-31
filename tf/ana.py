@@ -6,18 +6,18 @@ import tensorflow as tf
 import os,sys,time
 
 # constants
-IO_CONFIG  = 'io.cfg'
+IO_CONFIG  = 'io_test.cfg'
 BATCH_SIZE = 10
 LOGDIR     = 'log'
 ITERATIONS = 20
 
-SNAPSHOT   = '/home/cadams/larcv-tutorial/tf/toynet-1599'
+SNAPSHOT   = 'toynet-3399'
 
 #
 # Step 0: IO
 #
 train_io = larcv_threadio()        # create io interface 
-train_io_cfg = {'filler_name' : 'TrainIO',
+train_io_cfg = {'filler_name' : 'TestIO',
                 'verbosity'   : 0, 
                 'filler_cfg'  : IO_CONFIG}
 train_io.configure(train_io_cfg)   # configure
@@ -37,19 +37,12 @@ data_tensor_2d = tf.reshape(data_tensor, [-1,dim_data[1],dim_data[2],dim_data[3]
 # Let's keep 10 random set of images in the log
 tf.summary.image('input',data_tensor_2d,10)
 # build net
-net = toynet.build(input_tensor=data_tensor_2d, num_class=dim_label[1], trainable=True, debug=False)
+net = toynet.build(input_tensor=data_tensor_2d, num_class=dim_label[1], trainable=False, debug=False)
 net = tf.nn.softmax(net)
 # Define accuracy
 with tf.name_scope('accuracy'):
   correct_prediction = tf.equal(tf.argmax(net,1), tf.argmax(label_tensor,1))
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-  # tf.summary.scalar('accuracy', accuracy)
-# Define loss + backprop as training step
-# We aren't training, so there is no need to include the train step:
-with tf.name_scope('train'):
-  cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=label_tensor, logits=net))
-  # tf.summary.scalar('cross_entropy',cross_entropy)
-  # train_step = tf.train.RMSPropOptimizer(0.0003).minimize(cross_entropy)  
 
 #
 # Step 2: weight saver & summary writer
@@ -64,6 +57,9 @@ saver = tf.train.Saver()
 saver.restore(sess, SNAPSHOT)
 
 verbose = True
+
+fout = open('ana.csv','w')
+fout.write('index,label,prediction,softmax\n')
 #  
 # Step 3: Run training loop
 #
@@ -82,14 +78,13 @@ for i in range(ITERATIONS):
   # The output is the softmax output of the network, 
   # so we can use argmax to see what the network thinks is most likely
 
-  if verbose:
-      selection = np.argmax(_output, axis=1)
-      true_answer = np.argmax(batch_label, axis=1)
-    
-      for n, t in zip(selection, true_answer):
-            print "Network selected category {}, true answer was {}.".format(n, t)
-
-
+  for j in xrange(len(_output)):
+    softmax_array = _output[j]
+    label_array   = batch_label[j]
+    fout.write('%d,%d,%d,%g\n' % (i*BATCH_SIZE + j, 
+                                  np.argmax(label_array), 
+                                  np.argmax(softmax_array), 
+                                  np.max(softmax_array)))
 # inform log directory
 print
 print 'Run `tensorboard --logdir=%s` in terminal to see the results.' % LOGDIR
