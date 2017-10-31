@@ -7,7 +7,7 @@ import os,sys,time
 
 # constants
 IO_CONFIG  = 'io.cfg'
-BATCH_SIZE = 10
+BATCH_SIZE = 50
 LOGDIR     = 'log'
 ITERATIONS = 20000
 SAVE_SUMMARY = 20
