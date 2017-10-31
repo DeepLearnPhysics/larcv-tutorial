@@ -47,7 +47,7 @@ with tf.name_scope('accuracy'):
 with tf.name_scope('train'):
   cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=label_tensor, logits=net))
   tf.summary.scalar('cross_entropy',cross_entropy)
-  train_step = tf.train.RMSPropOptimizer(0.0003).minimize(cross_entropy)  
+  train_step = tf.train.RMSPropOptimizer(0.3).minimize(cross_entropy)  
 
 #
 # Step 2: weight saver & summary writer
@@ -57,7 +57,7 @@ merged_summary=tf.summary.merge_all()
 # Create a session
 sess = tf.InteractiveSession()
 # Initialize variables
-sess.run(tf.global_variables_initializer())
+# sess.run(tf.global_variables_initializer())
 # Create a summary writer handle
 writer=tf.summary.FileWriter(LOGDIR)
 writer.add_graph(sess.graph)
