@@ -7,9 +7,9 @@ import os,sys,time
 
 # constants
 IO_CONFIG  = 'io_test.cfg'
-BATCH_SIZE = 10
+BATCH_SIZE = 30
 LOGDIR     = 'log'
-ITERATIONS = 20
+ITERATIONS = 300
 
 SNAPSHOT   = 'toynet-3399'
 
@@ -35,7 +35,7 @@ data_tensor    = tf.placeholder(tf.float32, [None, dim_data[1] * dim_data[2] * d
 label_tensor   = tf.placeholder(tf.float32, [None, dim_label[1]], name='label')
 data_tensor_2d = tf.reshape(data_tensor, [-1,dim_data[1],dim_data[2],dim_data[3]],name='image_reshape')
 # Let's keep 10 random set of images in the log
-tf.summary.image('input',data_tensor_2d,10)
+#tf.summary.image('input',data_tensor_2d,10)
 # build net
 net = toynet.build(input_tensor=data_tensor_2d, num_class=dim_label[1], trainable=False, debug=False)
 net = tf.nn.softmax(net)
@@ -59,7 +59,7 @@ saver.restore(sess, SNAPSHOT)
 verbose = True
 
 fout = open('ana.csv','w')
-fout.write('index,label,prediction,softmax\n')
+fout.write('entry,label,prediction,softmax_pred,softmax0,softmax1,softmax2\n')
 #  
 # Step 3: Run training loop
 #
@@ -81,10 +81,14 @@ for i in range(ITERATIONS):
   for j in xrange(len(_output)):
     softmax_array = _output[j]
     label_array   = batch_label[j]
-    fout.write('%d,%d,%d,%g\n' % (i*BATCH_SIZE + j, 
+    fout.write('%d,%d,%d,%g,%g,%g,%g\n' % (i*BATCH_SIZE + j, 
                                   np.argmax(label_array), 
                                   np.argmax(softmax_array), 
-                                  np.max(softmax_array)))
+                                  np.max(softmax_array),
+                                  softmax_array[0],softmax_array[1],softmax_array[2]))
 # inform log directory
 print
 print 'Run `tensorboard --logdir=%s` in terminal to see the results.' % LOGDIR
+
+train_io.reset()
+time.sleep(5)
