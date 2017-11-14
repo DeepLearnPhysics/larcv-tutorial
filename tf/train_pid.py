@@ -9,9 +9,9 @@ import os,sys,time
 IO_CONFIG  = 'io.cfg'
 BATCH_SIZE = 50
 LOGDIR     = 'log'
-ITERATIONS = 20000
-SAVE_SUMMARY = 20
-SAVE_WEIGHTS = 200
+ITERATIONS = 100
+SAVE_SUMMARY = 10
+SAVE_WEIGHTS = 100
 
 #
 # Step 0: IO
@@ -87,9 +87,10 @@ for i in range(ITERATIONS):
     writer.add_summary(s,i)
 
   if (i+1)%SAVE_WEIGHTS == 0:
-    ssf_path = saver.save(sess,'toynet',global_step=i)
+    ssf_path = saver.save(sess,'weights/toynet',global_step=i)
     print 'saved @',ssf_path
 
 # inform log directory
 print
 print 'Run `tensorboard --logdir=%s` in terminal to see the results.' % LOGDIR
+train_io.reset()

@@ -11,7 +11,7 @@ BATCH_SIZE = 30
 LOGDIR     = 'log'
 ITERATIONS = 300
 
-SNAPSHOT   = 'toynet-3399'
+SNAPSHOT   = 'weights/toynet-999'
 
 #
 # Step 0: IO
@@ -88,7 +88,6 @@ for i in range(ITERATIONS):
                                   softmax_array[0],softmax_array[1],softmax_array[2]))
 # inform log directory
 print
-print 'Run `tensorboard --logdir=%s` in terminal to see the results.' % LOGDIR
 
 train_io.reset()
 time.sleep(5)
