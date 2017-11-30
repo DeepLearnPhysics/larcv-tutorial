@@ -9,7 +9,7 @@ import os,sys,time
 IO_CONFIG  = 'io.cfg'
 BATCH_SIZE = 50
 LOGDIR     = 'log'
-ITERATIONS = 100
+ITERATIONS = 1000
 SAVE_SUMMARY = 10
 SAVE_WEIGHTS = 100
 
