@@ -1,3 +1,4 @@
+*.data*
 *.ipynb
 *.root
 *.txt
@@ -8,3 +9,5 @@
 *.so
 *.pyc
 notebooks/larcv2
+*.meta
+*.index
