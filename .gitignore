@@ -1,3 +1,6 @@
+notebooks/log
+notebooks/weights
+*nohup.out
 *.data*
 *.ipynb
 *.root
